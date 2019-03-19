@@ -24,11 +24,14 @@ export default class HomeScreen extends React.Component {
 
     this.state = {
       username: '' ,
-      password: ''
+      password: '',
+      userEnable: false,
+      passEnable: false,
+      btnEnable: this.userEnable && this.passEnable
     };
   }
-
-  _handlePress = async e => {
+  
+  _handlePress() {
     fetch('http://localhost:5000/api/register', {
       method: 'POST',
       headers: {
@@ -39,6 +42,7 @@ export default class HomeScreen extends React.Component {
         pass: this.state.password
       }),
     });
+    alert('Registered');
   };
 
   render() {
@@ -51,10 +55,18 @@ export default class HomeScreen extends React.Component {
             style={
               styles.welcome
             }
-            onChangeText={
-              text => this.setState({
-                username: text
-              })} />
+            onChangeText={(text) => {
+              var letters = /^[a-zA-Z]*[0-9]*$/                
+              if (text.match(letters)) {
+                this.setState({ username: text.trim() });
+                this.setState({ userEnable : true });
+              }
+              else { 
+                alert('Invalid username, try again!');
+                this.setState({ userEnable : false });
+                }
+          }} 
+          />
           
           <RkTextInput
             rkType="rounded"
@@ -63,14 +75,19 @@ export default class HomeScreen extends React.Component {
             style={
               styles.welcome
             }
-            onChangeText={
-              text => this.setState({
-                password: text
-              })
-            } />
+            onChangeText={(text) => {
+              if (text == "") {
+                alert("Password field is empty!");
+              }
+              else {
+                this.setState({ password: text.trim()});
+                this.setState({ passEnable : true });
+              }
+            }} />
           
           <RkButton
             style={styles.button}
+            disabled = {!(this.state.userEnable&&this.state.passEnable)}
             onPress={
               () => this._handlePress()
             }>Register.

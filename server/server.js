@@ -20,6 +20,7 @@ app.get('/api/show', (req, res) => {
   
 app.post('/api/register', (req, res) => {
     var coll = db.collection('users')
+    coll.createIndex({ 'username': ""}, { unique: true });
     coll.insert({ 'username': req.body.user, 'password': req.body.pass }), function (err, result) {
         coll.find({ name: req.body.user }).toArray(function (err, docs) {
             console.log(docs[0]);

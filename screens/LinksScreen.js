@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet , Button,Image,View,TouchableOpacity,FlatList,Text} from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 
 export default class LinksScreen extends React.Component {
@@ -13,14 +13,16 @@ export default class LinksScreen extends React.Component {
     this.state = {
       username: '' ,
       password: '',
-      response: ''
+      response: '',
+      users: [],
     };
   }
 
   componentDidMount() {
-    this.callApi();
-    
+    this.callApi();   
   }
+
+
 
   callApi = async () => {
     return fetch('http://localhost:5000/api/show')
@@ -29,10 +31,17 @@ export default class LinksScreen extends React.Component {
 
         this.setState({
           response: responseJson,
-        }, function(){
-          alert(JSON.stringify(this.state.response));
+        }, function () {
+            const len = (this.state.response).length;
+            for (i = 0; i < len; i++){
+              this.state.users.push( {
+                id: i, image: "https://bootdey.com/img/Content/avatar/avatar1.png", name: this.state.response[i].username, comment:"working!"
+              })
+              this.forceUpdate();
+            }
+            console.log(this.state.users)
         });
-
+ 
       })
       .catch((error) =>{
         console.error(error);
@@ -41,20 +50,79 @@ export default class LinksScreen extends React.Component {
 
   
   render() {
+  
     return (
-        <ScrollView style={styles.container}>
-          {/* {u.map((item, key) => (
-            <Text key={key}>{item}</Text>
-          ))} */}
-        </ScrollView>
+      <FlatList
+      style={styles.root}
+      data={this.state.users}
+      ItemSeparatorComponent={() => {
+        return (
+          <View style={styles.separator}/>
+        )
+      }}
+      keyExtractor={(item)=>{
+        return item.id;
+      }}
+      renderItem={(item) => {
+        const Notification = item.item;
+        return(
+          <View style={styles.container}>
+            <TouchableOpacity onPress={() => {}}>
+              <Image style={styles.image} source={{uri: Notification.image}}/>
+            </TouchableOpacity>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <Text  style={styles.name}>{Notification.name}</Text>
+                <Text style={styles.time}>
+                  10:45pm
+                </Text>
+              </View>
+              <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+            </View>
+          </View>
+        );
+      }}/>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  root: {
+    backgroundColor: "#ffffff",
+    marginTop:10,
+  },
   container: {
+    paddingLeft: 19,
+    paddingRight: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  content: {
+    marginLeft: 16,
     flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
+  },
+  contentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#CCCCCC"
+  },
+  image:{
+    width:45,
+    height:45,
+    borderRadius:20,
+    marginLeft:20
+  },
+  time:{
+    fontSize:11,
+    color:"#808080",
+  },
+  name:{
+    fontSize:16,
+    fontWeight:"bold",
   },
 });
