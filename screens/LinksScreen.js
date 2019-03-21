@@ -1,10 +1,12 @@
 import React from 'react';
 import { ScrollView, StyleSheet , Button,Image,View,TouchableOpacity,FlatList,Text} from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import { DashboardNav} from '../navigation/DashboardNav';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    title: 'Registered Users',
+    title: 'Registered Users'
   };
 
   constructor(props) {
@@ -15,6 +17,7 @@ export default class LinksScreen extends React.Component {
       password: '',
       response: '',
       users: [],
+      key: []
     };
   }
 
@@ -39,7 +42,6 @@ export default class LinksScreen extends React.Component {
               })
               this.forceUpdate();
             }
-            console.log(this.state.users)
         });
  
       })
@@ -47,7 +49,6 @@ export default class LinksScreen extends React.Component {
         console.error(error);
       });
   }
-
   
   render() {
   
@@ -63,12 +64,17 @@ export default class LinksScreen extends React.Component {
       keyExtractor={(item)=>{
         return item.id;
       }}
-      renderItem={(item) => {
-        const Notification = item.item;
+        renderItem={(item) => {
+          x = item.toString();
+          const Notification = item.item;
         return(
           <View style={styles.container}>
-            <TouchableOpacity onPress={() => {}}>
-              <Image style={styles.image} source={{uri: Notification.image}}/>
+            <TouchableOpacity onPress={() =>
+              this.props.navigation.navigate('Dash', {
+                details: Notification
+              })
+            }>
+              <Image style={styles.image} source={{ uri: Notification.image }} />
             </TouchableOpacity>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
@@ -77,8 +83,8 @@ export default class LinksScreen extends React.Component {
                   10:45pm
                 </Text>
               </View>
-              <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
-            </View>
+                <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+              </View>
           </View>
         );
       }}/>
@@ -126,3 +132,4 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
   },
 });
+

@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 98894,
+  "expoServerNgrokUrl": "https://m2-kfm.anonymous.pointsapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.m2-kfm.anonymous.pointsapp.exp.direct",
+  "ngrokPid": 98907,
+  "webpackServerPort": null
+}
