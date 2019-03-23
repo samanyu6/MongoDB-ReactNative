@@ -6,6 +6,7 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
+import { Dashboard} from '../screens/Dashboard'
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -33,6 +34,9 @@ HomeStack.navigationOptions = {
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
+  Dashboard: Dashboard
+}, {
+  initialRouteName: "Links"
 });
 
 LinksStack.navigationOptions = {

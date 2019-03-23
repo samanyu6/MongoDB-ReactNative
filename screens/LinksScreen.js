@@ -70,7 +70,7 @@ export default class LinksScreen extends React.Component {
         return(
           <View style={styles.container}>
             <TouchableOpacity onPress={() =>
-              this.props.navigation.navigate('Dash', {
+              this.props.navigation.navigate('Dashboard', {
                 details: Notification
               })
             }>
